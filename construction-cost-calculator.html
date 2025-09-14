@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Cost Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        #c-est {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 1200px;
+            width: 100%;
+            padding: 2rem;
+            color: #1D3245;
+        }
+        
+        #c-est *{box-sizing:border-box}
+        #c-est h2{color:#1D3245;font-weight:700;font-size:2rem;margin-top:0;border-bottom:2px solid #F18F01;padding-bottom:0.5rem; margin-bottom: 1rem;}
+        #c-est h3{color:#1D3245;font-weight:600;font-size:1.5rem;margin-top:1.5rem;margin-bottom:0.75rem}
+        #c-est .s{background:#FFF;border-radius:0.5rem;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        #c-est .r{display:flex;flex-wrap:wrap;margin:0 -0.5rem}
+        #c-est .g{flex:1 0 300px;padding:0 0.5rem;margin-bottom:1rem}
+        #c-est label{display:block;margin-bottom:0.3rem;font-weight:500;font-size:0.875rem}
+        #c-est input, #c-est select{width:100%;padding:0.625rem;border:1px solid #EAEAEA;border-radius:0.25rem;font-family:inherit;font-size:0.875rem}
+        #c-est input:focus,#c-est select:focus{outline:none;border-color:#F18F01}
+        #c-est .err{border-color:#e74a3b;background-color:#fff8f8}
+        #c-est .et{color:#e74a3b;font-size:0.75rem;margin-top:0.2rem;display:none}
+        #c-est .btn{background:#1D3245;color:white;border:none;padding:0.75rem 1.25rem;font-weight:600;font-size:1rem;border-radius:0.25rem;cursor:pointer;transition:background-color .2s}
+        #c-est .btn:hover{background:#2a4562}
+        #c-est .btn:focus{outline:2px solid #F18F01;outline-offset:2px}
+        #c-est .bs{display:flex;gap:0.625rem;margin-top:1.25rem;flex-wrap:wrap}
+        #c-est .rs{display:none;background:#FFF;border-radius:0.5rem;padding:1.5rem;margin-top:2rem;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        #c-est .ts{display:flex;border-bottom:1px solid #EAEAEA;margin-bottom:1.25rem;flex-wrap:wrap;overflow-x:auto}
+        #c-est .t{padding:0.625rem 1.25rem;cursor:pointer;font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+        #c-est .t.a{border-bottom:3px solid #F18F01;color:#1D3245}
+        #c-est .c{display:none}
+        #c-est .c.a{display:block}
+        #c-est .d{background:#F8FAFD;border-radius:0.5rem;padding:0.9rem;margin-bottom:0.9rem}
+        #c-est .d h4{margin-top:0;margin-bottom:0.625rem;font-weight:600;font-size:1rem;color:#1D3245}
+        #c-est .v{font-size:1.5rem;font-weight:700;color:#1D3245}
+        #c-est .u{font-size:0.75rem;color:#666}
+        #c-est .ch{height:18.75rem;margin-bottom:1.875rem}
+        #c-est .tc{overflow-x:auto;margin-bottom:1.25rem}
+        #c-est table{width:100%;border-collapse:collapse;margin-bottom:1.25rem;min-width:500px}
+        #c-est th{background:#F8FAFD;text-align:left;padding:0.625rem;font-weight:600;border-bottom:2px solid #EAEAEA}
+        #c-est td{padding:0.625rem;border-bottom:1px solid #EAEAEA}
+        #c-est .bar{height:0.375rem;background:#EAEAEA;border-radius:0.1875rem;margin-top:0.3rem}
+        #c-est .lv{height:100%;background:#F18F01;border-radius:0.1875rem}
+        #c-est .ac{background:#F8FAFD;color:#1D3245;cursor:pointer;padding:0.875rem 1.125rem;width:100%;text-align:left;border:none;outline:none;transition:.4s;font-weight:600;border-radius:0.25rem;margin-bottom:0.3rem;font-size:1rem}
+        #c-est .ac:after{content:'+';color:#1D3245;font-weight:bold;float:right;margin-left:0.3rem}
+        #c-est .ac.a:after{content:"-"}
+        #c-est .p{padding:0 0.75rem;max-height:0;overflow:hidden;transition:max-height .2s ease-out;background:white;margin-bottom:0.625rem}
+        #c-est .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        #c-est .ld{display:inline-block;width:1.25rem;height:1.25rem;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:white;animation:spin 1s ease-in-out infinite;margin-left:0.625rem}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media(max-width:768px){#c-est .g{flex:1 0 100%}#c-est .bs{justify-content:center}#c-est .ts{justify-content:flex-start}#c-est .t{flex:0 0 auto;padding:0.625rem 0.9rem;font-size:0.8125rem}#c-est h2{font-size:1.25rem}#c-est h3{font-size:1rem}#c-est .ch{height:15.625rem}#c-est .v{font-size:1.25rem}#c-est .d{padding:0.75rem 0.625rem}#c-est .btn{padding:0.625rem 0.9rem;font-size:0.875rem}}
+        @media(max-width:480px){#c-est{padding:0.9rem 0.625rem}#c-est table{min-width:400px}#c-est .ch{height:13.75rem}#c-est .d h4{font-size:0.875rem}#c-est .v{font-size:1.125rem}#c-est .bs{flex-direction:column;width:100%}#c-est .btn{width:100%;margin-bottom:0.3rem}}
+        @media print{@page{margin:0.5cm;size:portrait}body *{visibility:hidden}#c-est,#c-est *{visibility:visible}#c-est{position:absolute;left:0;top:0;width:100%;background-color:white!important;box-shadow:none!important}#c-est .s,#c-est .btn,#c-est .bs{display:none!important}#c-est .rs{display:block!important;box-shadow:none!important;border:1px solid #eaeaea}#c-est .c{display:block!important;page-break-inside:avoid;margin-bottom:1.875rem;padding-bottom:1.25rem;border-bottom:1px dashed #ccc}#c-est .c:last-child{border-bottom:none}#c-est .ts{display:none!important}#c-est h2,#c-est h3{page-break-after:avoid;margin-top:1.5rem;margin-bottom:0.9rem}#c-est .ch{height:15.625rem}#c-est .tc{overflow-x:visible}#c-est table{page-break-inside:avoid;margin-bottom:1.875rem}#c-est .d{margin-bottom:1.25rem}}
+    </style>
+</head>
+<body>
+
+<div id="c-est">
+    <h2>Professional Construction Cost Estimator</h2>
+    <div class="s">
+        <h3>Project Information</h3>
+        <div class="r">
+            <div class="g">
+                <label for="area">Builtup Area</label>
+                <input type="number" id="area" min="1" step="1" value="1000">
+                <div class="et" id="ae">Please enter a positive number</div>
+            </div>
+            <div class="g">
+                <label for="unit">Area Unit</label>
+                <select id="unit">
+                    <option value="sqft">Square Feet (ft²)</option>
+                    <option value="sqm">Square Meters (m²)</option>
+                </select>
+            </div>
+            <div class="g">
+                <label for="cost">Cost Per Square Unit</label>
+                <input type="number" id="cost" min="1" step="1" value="100">
+                <div class="et" id="ce">Please enter a positive number</div>
+            </div>
+            <div class="g">
+                <label for="curr">Currency</label>
+                <select id="curr">
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="CAD">CAD (C$)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="INR">INR (₹)</option>
+                </select>
+            </div>
+        </div>
+        <div class="r">
+            <div class="g">
+                <label for="type">Project Type</label>
+                <select id="type">
+                    <option value="residential">Residential</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="industrial">Industrial</option>
+                    <option value="institutional">Institutional</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="educational">Educational</option>
+                    <option value="hospitality">Hospitality</option>
+                </select>
+            </div>
+            <div class="g">
+                <label for="qual">Quality Grade</label>
+                <select id="qual">
+                    <option value="economy">Economy</option>
+                    <option value="standard" selected>Standard</option>
+                    <option value="premium">Premium</option>
+                    <option value="luxury">Luxury</option>
+                </select>
+            </div>
+            <div class="g">
+                <label for="flr">Number of Floors</label>
+                <input type="number" id="flr" min="1" max="100" value="2">
+                <div class="et" id="fe">Please enter a number between 1 and 100</div>
+            </div>
+            <div class="g">
+                <label for="loc">Location Type</label>
+                <select id="loc">
+                    <option value="urban">Urban</option>
+                    <option value="suburban" selected>Suburban</option>
+                    <option value="rural">Rural</option>
+                </select>
+            </div>
+        </div>
+        <div class="r">
+            <div class="g">
+                <label for="site">Site Conditions</label>
+                <select id="site">
+                    <option value="flat" selected>Flat</option>
+                    <option value="sloped">Sloped</option>
+                    <option value="difficult">Difficult</option>
+                </select>
+            </div>
+            <div class="g">
+                <label for="str">Structural System</label>
+                <select id="str">
+                    <option value="rcc" selected>RCC Frame</option>
+                    <option value="load-bearing">Load-Bearing</option>
+                    <option value="steel">Steel Frame</option>
+                    <option value="timber">Timber Frame</option>
+                    <option value="prefab">Prefabricated</option>
+                </select>
+            </div>
+            <div class="g">
+                <label for="compl">Project Complexity</label>
+                <select id="compl">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                    <option value="very-high">Very High</option>
+                </select>
+            </div>
+        </div>
+        <button class="ac">Advanced Options</button>
+        <div class="p">
+            <div class="r">
+                <div class="g">
+                    <label for="found">Foundation Type</label>
+                    <select id="found">
+                        <option value="slab" selected>Slab on Grade</option>
+                        <option value="strip">Strip Foundation</option>
+                        <option value="pile">Pile Foundation</option>
+                        <option value="raft">Raft Foundation</option>
+                        <option value="basement">Basement</option>
+                    </select>
+                </div>
+                <div class="g">
+                    <label for="roof">Roof Type</label>
+                    <select id="roof">
+                        <option value="flat" selected>Flat Roof</option>
+                        <option value="pitched">Pitched Roof</option>
+                        <option value="gable">Gable Roof</option>
+                        <option value="hip">Hip Roof</option>
+                        <option value="green">Green Roof</option>
+                    </select>
+                </div>
+                <div class="g">
+                    <label for="ext">Exterior Finish</label>
+                    <select id="ext">
+                        <option value="brick" selected>Brick</option>
+                        <option value="stucco">Stucco</option>
+                        <option value="siding">Siding</option>
+                        <option value="stone">Stone</option>
+                        <option value="curtainwall">Curtain Wall</option>
+                    </select>
+                </div>
+                <div class="g">
+                    <label for="hvac">HVAC System</label>
+                    <select id="hvac">
+                        <option value="standard" selected>Standard</option>
+                        <option value="split">Split System</option>
+                        <option value="vrf">VRF System</option>
+                        <option value="central">Central Plant</option>
+                        <option value="geothermal">Geothermal</option>
+                    </select>
+                </div>
+            </div>
+            <div class="r">
+                <div class="g">
+                    <label for="sust">Sustainability Rating</label>
+                    <select id="sust">
+                        <option value="none" selected>None</option>
+                        <option value="basic">Basic Green Features</option>
+                        <option value="certified">Certified Green Building</option>
+                        <option value="platinum">Platinum/High Rating</option>
+                    </select>
+                </div>
+                <div class="g">
+                    <label for="access">Site Access</label>
+                    <select id="access">
+                        <option value="good" selected>Good Access</option>
+                        <option value="limited">Limited Access</option>
+                        <option value="difficult">Difficult Access</option>
+                    </select>
+                </div>
+                <div class="g">
+                    <label for="contin">Contingency Percentage (%)</label>
+                    <input type="number" id="contin" min="0" max="25" step="0.5" value="10">
+                    <div class="et" id="ce2">Please enter a number between 0 and 25</div>
+                </div>
+                <div class="g">
+                    <label for="design">Design Fees Percentage (%)</label>
+                    <input type="number" id="design" min="0" max="20" step="0.5" value="8">
+                    <div class="et" id="de2">Please enter a number between 0 and 20</div>
+                </div>
+            </div>
+        </div>
+        <div class="bs">
+            <button id="calc" class="btn">Calculate Estimate</button>
+            <button id="reset" class="btn">Reset</button>
+        </div>
+    </div>
+    <div id="results" class="rs">
+        <div class="ts">
+            <div class="t a" data-tab="sum">Summary Dashboard</div>
+            <div class="t" data-tab="mat">Material Breakdown</div>
+            <div class="t" data-tab="lab">Labor & Timeline</div>
+            <div class="t" data-tab="cost">Cost Analysis</div>
+            <div class="t" data-tab="reg">Regulatory & Site</div>
+            <div class="t" data-tab="sust">Sustainability</div>
+        </div>
+        <div id="sum-tab" class="c a"> ... (truncated for brevity)
